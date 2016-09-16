@@ -4,8 +4,6 @@
 
 TEST_CASE( "Test Vector2 class", "[vector2]" )
 {
-    log_type_properties<ross::vector2f>();
-    
     require_pod_trivial<ross::vector2f>();
     
     ross::vector2f v0 {2.0, 0.0};
