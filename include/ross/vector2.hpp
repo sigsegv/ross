@@ -23,7 +23,7 @@ public:
      *
      * @returns the length of this vector
      */
-    real_t magnitude() const
+    constexpr real_t magnitude() const noexcept
     {
         // TODO make constexpr
         return std::sqrt(x * x + y * y);
@@ -37,6 +37,8 @@ public:
     vector2<T> normalized() const
     {
         // TODO make constexpr
+        const real_t mag = magnitude();
+        if(mag == 0.0) return vector2{0.0,0.0};
         return (*this) / magnitude();
     }
     
