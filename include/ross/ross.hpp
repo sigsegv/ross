@@ -11,6 +11,7 @@ namespace ross
     typedef color<3> color_rgb;
     typedef vector2<integer_t> vector2i;
     typedef vector2<real_t> vector2f;
+    typedef vector2<size_t> vector2ui;
     typedef line2<real_t> line2f;
     
     template<typename T>
