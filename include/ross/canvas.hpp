@@ -16,7 +16,7 @@ public:
      *
      * @param dimension the width and height of the final raster
      */
-    canvas(const vector2i& dimension) :
+    canvas(const vector2ui& dimension) :
         dimension(dimension),
         m_data(new uint8_t[dimension.x * dimension.y * 3])
     {
@@ -60,12 +60,12 @@ public:
         m_data[offset + 2] = color[2] * 0xFF;
     }
     
-    const vector2i dimension;
+    const vector2ui dimension;
 private:
     uint8_t* m_data;
     
     void scan_line(const vector2f& p1, const vector2f& p2, const color_rgb& color)
-    {
+    {/*
         const vector2f delta = (p2 - p1).normalized();
         const bool x_dominant = std::abs(delta.x) > std::abs(delta.y);
         vector2f device_v = p1;
@@ -80,10 +80,10 @@ private:
             {
                 
             }
-        }
+        }*/
     }
     
-    // Bresenham’s algorithm (1965)
+    /* Bresenham’s algorithm (1965)
     // Graphic Gems 1 II.8
     integer_t sgn(integer_t x)
     {
@@ -107,6 +107,6 @@ private:
             set_pixel({x,y}, color);
         }
         
-    }
+    }*/
 };
 }
