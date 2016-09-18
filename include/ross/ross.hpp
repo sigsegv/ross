@@ -4,6 +4,7 @@
 #include "color.hpp"
 #include "vector2.hpp"
 #include "line2.hpp"
+#include "bbox.hpp"
 #include "surface_rgb24.hpp"
 
 namespace ross
@@ -13,6 +14,9 @@ namespace ross
     typedef vector2<real_t> vector2f;
     typedef vector2<size_t> vector2ui;
     typedef line2<real_t> line2f;
+    using line2ui = line2<size_t>;
+    using bboxui = bbox<size_t>;
+    using bboxf = bbox<real_t>;
     
     template<typename T>
     constexpr vector2<T> floor(const vector2f& v)
