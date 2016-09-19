@@ -22,7 +22,7 @@ TEST_CASE( "Test bbox class", "[bbox]" )
     ross::bboxui b3({5,5},{7,7});
     ross::bboxui b4({7,7},{8,8});
     
-    ross::bboxui b5 = b2.u(b3);
+    ross::bboxui b5 = b2.merge(b3);
     REQUIRE(b5.left() == 3);
     REQUIRE(b5.top() == 3);
     REQUIRE(b5.right() == 7);

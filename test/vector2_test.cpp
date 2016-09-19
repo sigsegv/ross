@@ -16,7 +16,7 @@ TEST_CASE( "Test Vector2 class", "[vector2]" )
     REQUIRE(v4.y == 3.0);
     REQUIRE(v4.magnitude() == std::sqrt(std::pow(v4.x, 2.0) + std::pow(v4.y, 2.0)));
     
-    ross::vector2f v4_unit = v4.normalized();
+    ross::vector2f v4_unit = v4.unit();
     REQUIRE(v4_unit.magnitude() == 1.0);
     
     REQUIRE(v4.dot(v2) == 5.0);

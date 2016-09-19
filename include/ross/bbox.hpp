@@ -89,7 +89,7 @@ public:
      * @param other bbox to union
      * @returns union of this and other
      */
-    constexpr bbox u(const bbox& other) const noexcept
+    constexpr bbox merge(const bbox& other) const noexcept
     {
         const T l = std::min(left(), other.left());
         const T t = std::min(top(), other.top());
@@ -115,6 +115,25 @@ public:
         const T b = std::min(bottom(), other.bottom());
         return bbox({l, t}, {r, b});
     }
+    
+    constexpr bool contains(const vector2<T>& point) const noexcept
+    {
+        return left() < point.x && right() > point.x && top() < point.y && bottom() > point.y;
+    }
+    
+    /**
+     * Checks if any part of line is inside this
+     *
+     * @param line to check
+     * @returns true if any part of line inside this
+     */
+//    constexpr bool contains(const line2<T>& line) const noexcept
+//    {
+//        bbox<T> b{line.u, line.v};
+//        if(intersect(b).is_empty()) return false;
+//        
+//        
+//    }
     
     /**
      * check if bbox is an empty one
