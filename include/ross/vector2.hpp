@@ -34,7 +34,7 @@ public:
      *
      * @returns This vector with length of 1
      */
-    vector2<T> normalized() const
+    vector2 unit() const
     {
         // TODO make constexpr
         const real_t mag = magnitude();
@@ -51,6 +51,16 @@ public:
     constexpr real_t dot(const vector2& other) const noexcept
     {
         return x * other.x + y * other.y;
+    }
+    
+    /**
+     * Get a normal vector of this vector
+     *
+     * @returns one of the two possible normal vectors
+     */
+    constexpr vector2 normal() const noexcept
+    {
+        return vector2{-y, x};
     }
     
     /**

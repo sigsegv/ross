@@ -10,22 +10,19 @@ TEST_CASE( "Test Line2 class", "[line2]" )
     REQUIRE(std::is_standard_layout<ross::line2f>::value);
     //REQUIRE(std::is_pod<ross::line2f>::value);
     
-    ross::line2f l0{{1.0, 1.0}, {2.0, 2.0}};
-    ross::line2f l1 = l0 * 4.0;
-    REQUIRE(l1.u.x == 4.0);
-    REQUIRE(l1.u.y == 4.0);
-    REQUIRE(l1.v.x == 8.0);
-    REQUIRE(l1.v.y == 8.0);
+    ross::line2f l0{{1.0,1.0}, {1.0, 1.0}};
+    ross::line2f l1{{2.0,2.0}, {1.0, 1.0}};
+    ross::line2f l2{{3.0,0.0}, {0.0, 1.0}};
+    ross::line2f::line_intersect_result result0 = l0.intersect(l1);
+    ross::line2f::line_intersect_result result1 = l0.intersect(l2);
     
-    ross::line2f l2 = l0 + l1;
-    REQUIRE(l2.u.x == 5.0);
-    REQUIRE(l2.u.y == 5.0);
-    REQUIRE(l2.v.x == 10.0);
-    REQUIRE(l2.v.y == 10.0);
+    REQUIRE(!result0.valid);
+    REQUIRE(result1.valid);
+    ross::vector2f expected_intersect{3.0,3.0};
+    REQUIRE(result1.point == expected_intersect);
     
     ross::line2f l3{{0.0,0.0}, {10.0, 0.0}};
-    REQUIRE(l3.magnitude() == Approx(10.0));
-    ross::vector2f l3_normal = l3.normal().normalized();
+    ross::vector2f l3_normal = l3.normal().unit();
     ross::vector2f l3_expected_normal{0.0, 1.0};
     REQUIRE(l3_normal == l3_expected_normal);
 }
