@@ -74,7 +74,7 @@ public:
      * @param other line to find intersection of
      * @returns intersection result structure
      */
-    constexpr line_intersect_result intersect(const line2<T>& other) const noexcept
+    line_intersect_result intersect(const line2<T>& other) const noexcept
     {
         const vector2<T> ln = normal();
         const real_t denom = ln.dot(other.v);
