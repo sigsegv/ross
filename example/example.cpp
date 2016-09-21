@@ -37,7 +37,7 @@ void example_1()
     ross::canvas canvas({64,64});
     std::memset(canvas.data(), 0xFF, canvas.size());
     ross::color_rgb magenta{{1.0, 0.0, 1.0}};
-    for(ross::integer_t x = 0; x < canvas.dimension.x; ++x)
+    for(ross::size_t x = 0; x < canvas.dimension.x; ++x)
     {
         canvas.set_pixel({x, x}, magenta);
     }
