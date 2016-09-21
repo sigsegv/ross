@@ -52,12 +52,12 @@ public:
         scan_line(p1, p2, color);
     }
     
-    void set_pixel(const vector2i& point, const color_rgb& color)
+    void set_pixel(const vector2ui& point, const color_rgb& color)
     {
         size_t offset = ((point.y * dimension.x) + point.x) * 3;
-        m_data[offset] = color[0] * 0xFF;
-        m_data[offset + 1] = color[1] * 0xFF;
-        m_data[offset + 2] = color[2] * 0xFF;
+        m_data[offset    ] = static_cast<uint8_t>(color[0] * 0xFF);
+        m_data[offset + 1] = static_cast<uint8_t>(color[1] * 0xFF);
+        m_data[offset + 2] = static_cast<uint8_t>(color[2] * 0xFF);
     }
     
     const vector2ui dimension;

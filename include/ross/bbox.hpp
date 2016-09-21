@@ -89,7 +89,7 @@ public:
      * @param other bbox to union
      * @returns union of this and other
      */
-    constexpr bbox merge(const bbox& other) const noexcept
+    bbox merge(const bbox& other) const noexcept
     {
         const T l = std::min(left(), other.left());
         const T t = std::min(top(), other.top());
@@ -104,7 +104,7 @@ public:
      * @param other bbox
      * @returns intersection of this and other
      */
-    constexpr bbox intersect(const bbox& other) const noexcept
+    bbox intersect(const bbox& other) const noexcept
     {
         if(other.left() > right() || left() > other.right()) return empty();
         if(other.bottom() < top() || other.top() > bottom()) return empty();
