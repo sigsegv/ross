@@ -24,5 +24,4 @@ TEST_CASE( "Test Vector2 class", "[vector2]" )
     REQUIRE(v2.distance(v3) == Approx(2.8284271247461903));
     
     REQUIRE(v2.angle(ross::vector2f{1.0, 0.0}) == Approx(ross::kPI_4));
-    
 }
