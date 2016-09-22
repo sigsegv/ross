@@ -12,6 +12,7 @@ int main(int argc, char** argv)
     std::cout << "Welcome to Ross!\n";
     
     example_1();
+	example_2();
     
     return 0;
 }
@@ -21,6 +22,8 @@ void example_2()
     ross::canvas canvas({64,64});
     std::memset(canvas.data(), 0xFF, canvas.size());
     ross::color_rgb magenta{{1.0, 0.0, 1.0}};
+
+	canvas.draw_line({ 20.0, 30.0 }, { 60.0, 40.0 }, magenta);
     
     write_canvas_to_disk(canvas, "example2.ppm");
 }

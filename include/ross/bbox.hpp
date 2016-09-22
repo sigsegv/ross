@@ -6,7 +6,7 @@
 namespace ross
 {
 /**
- * Immutable POD 2D axis aligned bounding box
+ * 2D axis aligned bounding box
  */
 template<typename T>
 class bbox
@@ -19,10 +19,25 @@ public:
         _top_left({std::min(p1.x, p2.x), std::min(p1.y, p2.y)}),
         _width(p1.x > p2.x ? p1.x - p2.x : p2.x - p1.x),
         _height(p1.y > p2.y ? p1.y - p2.y : p2.y - p1.y)
-    {
-        
+    {    
     }
+
+	bbox(const bbox& other) :
+		_top_left(other._top_left),
+		_width(other._width),
+		_height(other._height)
+	{
+	}
     
+	bbox& operator=(const bbox& other)
+	{
+		if (this == &other) return *this;
+		_top_left = other._top_left;
+		_width = other._width;
+		_height = other._height;
+		return *this;
+	}
+
     static bbox empty() noexcept
     {
         return bbox({0,0},{0,0});
@@ -146,8 +161,8 @@ public:
     }
 
 private:
-    const vector2<T> _top_left;
-    const T _width, _height;
+    vector2<T> _top_left;
+    T _width, _height;
 };
 
 template<typename T>

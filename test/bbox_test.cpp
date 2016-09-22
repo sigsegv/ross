@@ -5,8 +5,9 @@
 TEST_CASE( "Test bbox class", "[bbox]" )
 {
     ross::bboxui b0{{1, 1},{2,2}};
-    ross::bboxui b1  = b0;
-    
+    ross::bboxui b1 = b0;
+	b1 = b0;
+
     REQUIRE(b0.left() == 1);
     REQUIRE(b0.top() == 1);
     REQUIRE(b0.right() == 2);

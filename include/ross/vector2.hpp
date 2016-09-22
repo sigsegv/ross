@@ -9,14 +9,14 @@ namespace ross
 {
 
 /**
- * Immutable POD 2D Vector
+ * 2D Vector (or point)
  */
 template <typename T>
 class vector2
 {
 public:
-    const T x;
-    const T y;
+    T x;
+    T y;
     
     /**
      * The length of this vector

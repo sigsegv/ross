@@ -9,8 +9,8 @@ template<typename T>
 class line2
 {
 public:
-    const vector2<T> u;
-    const vector2<T> v;
+    vector2<T> u;
+    vector2<T> v;
     
     /**
      * Get a normal vector of this line

@@ -49,7 +49,7 @@ public:
      */
     void draw_line(const vector2f& p1, const vector2f& p2, const color_rgb& color)
     {
-        scan_line(p1, p2, color);
+		midpoint_line(p1, p2, color);
     }
     
     void set_pixel(const vector2ui& point, const color_rgb& color)
@@ -63,6 +63,34 @@ public:
     const vector2ui dimension;
 private:
     uint8_t* m_data;
+
+	void midpoint_line(const vector2f& p1, const vector2f& p2, const color_rgb& color)
+	{
+		const real_t dx = p2.x - p1.x;
+		const real_t dy = p2.y - p1.y;
+		real_t d = 2.0 * dy - dx;
+		const real_t incrE = 2.0 * dy;
+		const real_t incrNE = 2.0 * (dy - dx);
+		real_t x = p1.x;
+		real_t y = p1.y;
+		set_pixel(floor<size_t>({x,y}), color);
+
+		while (x < p2.x)
+		{
+			if (d <= 0.0)
+			{
+				d += incrE;
+				x += 1.0;
+			}
+			else
+			{
+				d += incrNE;
+				x += 1.0;
+				y += 1.0;
+			}
+			set_pixel(floor<size_t>({ x,y }), color);
+		}
+	}
     
     void scan_line(const vector2f& p1, const vector2f& p2, const color_rgb& color)
     {/*

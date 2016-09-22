@@ -19,12 +19,18 @@ namespace ross
     using bboxf = bbox<real_t>;
     
     template<typename T>
-    constexpr vector2<T> floor(const vector2f& v)
+    inline vector2<T> floor(const vector2f& v)
     {
-        return {std::floor(v.x), std::floor(v.y)};
+        return {(std::floor(v.x)), std::floor(v.y)};
     }
+
+	template<>
+	inline vector2ui floor(const vector2f& v)
+	{
+		return{ sizeT(std::floor(v.x)), sizeT(std::floor(v.y)) };
+	}
     
-    inline const vector2i round(const vector2f& v)
+    inline vector2i round(const vector2f& v)
     {
         return { std::llround(v.x), std::llround(v.y) };
     }
