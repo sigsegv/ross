@@ -37,18 +37,18 @@ void example_1()
     // draw horizontal line
     // canvas.moveto
     // canvas.lineto
-    ross::canvas canvas({64,64});
+    ross::canvas canvas({64, 64});
     std::memset(canvas.data(), 0xFF, canvas.size());
     ross::color_rgb magenta{{1.0, 0.0, 1.0}};
     for(ross::size_t x = 0; x < canvas.dimension.x; ++x)
     {
         canvas.set_pixel({x, x}, magenta);
-    }
+    }	
     write_canvas_to_disk(canvas, "example1.ppm");
 }
 
 void write_canvas_to_disk(const ross::canvas& canvas, const std::string& ascii_out_path)
 {
-    std::ofstream fout(ascii_out_path);
+    std::ofstream fout(ascii_out_path, std::ios::binary);
     ross::ppm_write(fout, canvas.data(), canvas.dimension.x, canvas.dimension.y);
 }
