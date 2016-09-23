@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.hpp"
 #include "types.hpp"
 #include "color.hpp"
 #include "vector2.hpp"

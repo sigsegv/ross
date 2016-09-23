@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined _DEBUG
+#if defined ROSS_DEBUG
 #include <cassert>
 #include <limits>
 #endif
@@ -20,11 +20,11 @@ namespace ross
 		return static_cast<size_t>(v);
 	}
 
-#if defined _DEBUG 
+#if defined ROSS_DEBUG 
 	inline size_t sizeT(real_t v)
 	{
-		assert(v > 0.0);
-		assert(v < static_cast<real_t>(std::numeric_limits<size_t>::max()));
+		assert(v >= 0.0);
+		assert(v <= static_cast<real_t>(std::numeric_limits<size_t>::max()));
 		return static_cast<size_t>(v);
 	}
 #endif

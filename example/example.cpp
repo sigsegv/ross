@@ -22,8 +22,11 @@ void example_2()
     ross::canvas canvas({64,64});
     std::memset(canvas.data(), 0xFF, canvas.size());
     ross::color_rgb magenta{{1.0, 0.0, 1.0}};
+    ross::color_rgb yellow{{1.0, 1.0, 0.0}};
+    ross::color_rgb cyan{{0.0, 1.0, 1.0}};
+    ross::color_rgb black{{0.0, 0.0, 0.0}};
 
-	canvas.draw_line({ 20.0, 30.0 }, { 60.0, 40.0 }, magenta);
+	canvas.draw_line({ 0.0, 44.0 }, { 64.0, 24.0 }, magenta);
     
     write_canvas_to_disk(canvas, "example2.ppm");
 }
