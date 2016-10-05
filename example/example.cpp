@@ -26,7 +26,12 @@ void example_2()
     ross::color_rgb cyan{{0.0, 1.0, 1.0}};
     ross::color_rgb black{{0.0, 0.0, 0.0}};
 
-	canvas.draw_line({ 0.0, 44.0 }, { 64.0, 24.0 }, magenta);
+	canvas.draw_line({ 0.0, 24.0 }, { 64.0, 44.0 }, magenta);
+    canvas.draw_line({ 0.0, 0.0 }, { 64.0, 64.0 }, magenta);
+    canvas.draw_line({ 64.0, 24.0 }, { 0.0, 44.0 }, cyan);
+    canvas.draw_line({ 0.0, 64.0 }, { 64.0, 0.0 }, cyan);
+    canvas.draw_line({ 32.0, 0.0 }, { 32.0, 64.0 }, yellow);
+    canvas.draw_line({ 0.0, 32.0 }, { 64.0, 32.0 }, black);
     
     write_canvas_to_disk(canvas, "example2.ppm");
 }
