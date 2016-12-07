@@ -5,7 +5,13 @@
 
 void example_1();
 void example_2();
+void example_3();
 void write_canvas_to_disk(const ross::canvas& canvas, const std::string& ascii_out_path);
+
+const ross::color_rgb magenta{ { 1.0, 0.0, 1.0 } };
+const ross::color_rgb yellow{ { 1.0, 1.0, 0.0 } };
+const ross::color_rgb cyan{ { 0.0, 1.0, 1.0 } };
+const ross::color_rgb black{ { 0.0, 0.0, 0.0 } };
 
 int main(int argc, char** argv)
 {
@@ -13,23 +19,30 @@ int main(int argc, char** argv)
     
     example_1();
 	example_2();
+	example_3();
     
     return 0;
+}
+
+void example_3()
+{
+	ross::canvas canvas({ 64,64 });
+	std::memset(canvas.data(), 0xFF, canvas.size());
+
+	canvas.draw_rect({ 15.0, 15.0 }, { 45.0, 45.0 }, magenta);
+
+	write_canvas_to_disk(canvas, "example3.ppm");
 }
 
 void example_2()
 {
     ross::canvas canvas({64,64});
     std::memset(canvas.data(), 0xFF, canvas.size());
-    ross::color_rgb magenta{{1.0, 0.0, 1.0}};
-    ross::color_rgb yellow{{1.0, 1.0, 0.0}};
-    ross::color_rgb cyan{{0.0, 1.0, 1.0}};
-    ross::color_rgb black{{0.0, 0.0, 0.0}};
 
 	canvas.draw_line({ 0.0, 24.0 }, { 64.0, 44.0 }, magenta);
     canvas.draw_line({ 0.0, 0.0 }, { 64.0, 64.0 }, magenta);
     canvas.draw_line({ 64.0, 24.0 }, { 0.0, 44.0 }, cyan);
-    canvas.draw_line({ 0.0, 64.0 }, { 64.0, 0.0 }, cyan);
+    //canvas.draw_line({ 0.0, 64.0 }, { 64.0, 0.0 }, cyan);
     canvas.draw_line({ 32.0, 0.0 }, { 32.0, 64.0 }, yellow);
     canvas.draw_line({ 0.0, 32.0 }, { 64.0, 32.0 }, black);
     
