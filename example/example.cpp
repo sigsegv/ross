@@ -33,8 +33,10 @@ void example_5()
 	ross::canvas canvas({ 64,64 });
 	std::memset(canvas.data(), 0xFF, canvas.size());
 
-	std::vector<ross::vector2f> path = { { 15.0, 15.0 },{ 30.0, 45.0 },{ 45.0, 15.0 } };
-	canvas.fill_path(path, magenta);
+	std::vector<ross::vector2f> triangle = { { 12.0, 60.0 },{ 32.0, 4.0 },{ 52.0, 60.0 } };
+	canvas.fill_path(triangle, magenta);
+	std::vector<ross::vector2f> arrow = { { 28.0, 20.0 },{ 28.0, 40.0 },{ 22.0, 40.0 },{32.0,50.0},{42.0, 40.0},{36.0, 40.0},{36.0,20.0} };
+	canvas.fill_path(arrow, cyan);
 
 	write_canvas_to_disk(canvas, "example5.ppm");
 }

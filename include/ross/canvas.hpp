@@ -8,6 +8,7 @@
 #include <map>
 #include <list>
 #include <algorithm>
+#include <sstream>
 #include <ross/ross.hpp>
 #include <ross/detail/algorithms.hpp>
 
@@ -68,9 +69,16 @@ public:
 		//scan_line(p1, p2, width, color);
 	}
 
-	struct edge_t
+	class edge_t
 	{
+	public:
 		real_t y_max, x_min, slope_inv, x;
+		std::string str()
+		{
+			std::ostringstream oss;
+			oss << "edge_t y_max=" << y_max << " x_min=" << x_min << " slope_inv=" << slope_inv << " x=" << x;
+			return oss.str();
+		}
 	};
 
 	struct edge_sort
@@ -117,6 +125,7 @@ public:
 					// neg slope edges start at max x
 					edge.x = edge.x_min + (edge.y_max - y_min) * -edge.slope_inv;
 				}
+				std::cout << edge.str() << std::endl;
 				bucket.push_back(edge);
 			}
 		}
@@ -126,6 +135,19 @@ public:
 			edge_bucket_t& edge_bucket = edge_map_pair.second;
 			std::sort(edge_bucket.begin(), edge_bucket.end(), edge_sort()); 
 		});
+		// debug
+		std::for_each(edge_table.begin(), edge_table.end(), [](auto edge_map_pair) -> void
+		{
+			const real_t y = edge_map_pair.first;
+			edge_bucket_t& edge_bucket = edge_map_pair.second;
+			std::cout << y << " ";
+			std::for_each(edge_bucket.begin(), edge_bucket.end(), [](auto edge) -> void
+			{
+				std::cout << edge.str() << " ";
+			});
+			std::cout << std::endl;
+		});
+		//
 		scan_line2(edge_table, color);
 	}
 
@@ -593,7 +615,11 @@ private:
 					active_edge_table.push_back(edge);
 				}
 			}
-			std::remove_if(active_edge_table.begin(), active_edge_table.end(), [y_cur](const edge_t& edge) -> bool { return edge.y_max <= y_cur;  });
+			active_edge_table.erase(std::remove_if(active_edge_table.begin(), active_edge_table.end(), [y_cur](const edge_t& edge) -> bool 
+				{ 
+					return edge.y_max <= y_cur; 
+				}), 
+				active_edge_table.end());
 			active_edge_table.sort(edge_sort());
 
 			active_edge_table_t::const_iterator left_edge, right_edge;
