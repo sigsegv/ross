@@ -6,6 +6,8 @@
 void example_1();
 void example_2();
 void example_3();
+void example_4();
+void example_5();
 void write_canvas_to_disk(const ross::canvas& canvas, const std::string& ascii_out_path);
 
 const ross::color_rgb magenta{ { 1.0, 0.0, 1.0 } };
@@ -20,8 +22,32 @@ int main(int argc, char** argv)
     example_1();
 	example_2();
 	example_3();
+	example_4();
+	example_5();
     
     return 0;
+}
+
+void example_5()
+{
+	ross::canvas canvas({ 64,64 });
+	std::memset(canvas.data(), 0xFF, canvas.size());
+
+	std::vector<ross::vector2f> path = { { 15.0, 15.0 },{ 30.0, 45.0 },{ 45.0, 15.0 } };
+	canvas.fill_path(path, magenta);
+
+	write_canvas_to_disk(canvas, "example5.ppm");
+}
+
+void example_4()
+{
+	ross::canvas canvas({ 64,64 });
+	std::memset(canvas.data(), 0xFF, canvas.size());
+
+	std::vector<ross::vector2f> path = { {15.0, 15.0}, {15.0, 45.0}, {45.0, 45.0}, {45.0, 15.0} };
+	canvas.fill_path(path, magenta);
+
+	write_canvas_to_disk(canvas, "example4.ppm");
 }
 
 void example_3()

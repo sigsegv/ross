@@ -59,6 +59,77 @@ public:
     }
 
 	/**
+	* Draw line from p1 to p2 using color
+	*/
+	void draw_line(const vector2f& p1, const vector2f& p2, real_t width, const color_rgb& color)
+	{
+		//midpoint_line(p1, p2, color);
+		//symwuline(p1, p2, color);
+		//scan_line(p1, p2, width, color);
+	}
+
+	struct edge_t
+	{
+		real_t y_max, x_min, slope_inv, x;
+	};
+
+	struct edge_sort
+	{
+		bool operator()(const edge_t& a, const edge_t& b) { return a.x_min < b.x_min; }
+	};
+
+	using edge_bucket_t = std::vector<edge_t>;
+	using edge_table_t = std::map<real_t, edge_bucket_t>;
+	using active_edge_table_t = std::list<edge_t>;
+
+	void stroke_path(std::vector<vector2f>& path, const color_rgb& stroke_color, real_t width)
+	{
+		// Build edges
+
+	}
+
+	void fill_path(std::vector<vector2f>& path, const color_rgb& color)
+	{
+		using edge_bucket_t = std::vector<edge_t>;
+		using edge_table_t = std::map<real_t, edge_bucket_t>;
+
+		if (path.size() < 2) return;
+
+		edge_table_t edge_table;
+
+		// Build edges
+		std::vector<vector2f>::const_iterator curr, next, end = path.end();
+		for (curr = path.begin(), next = curr + 1; next != end; ++curr, ++next)
+		{
+			edge_t edge;
+			edge.y_max = std::max(curr->y, next->y);
+			edge.x_min = std::min(curr->x, next->x);
+			edge.x = edge.x_min;
+			const real_t y_min = std::min(curr->y, next->y);
+			const real_t run = std::max(curr->x, next->x) - edge.x_min;
+			const real_t rise = next->y - curr->y;
+			if (rise != 0.0)
+			{
+				edge.slope_inv = run / rise;
+				edge_bucket_t& bucket = edge_table[y_min];
+				if (edge.slope_inv < 0.0)
+				{
+					// neg slope edges start at max x
+					edge.x = edge.x_min + (edge.y_max - y_min) * -edge.slope_inv;
+				}
+				bucket.push_back(edge);
+			}
+		}
+		// sort each edge in each bucket by x_min
+		std::for_each(edge_table.begin(), edge_table.end(), [](auto edge_map_pair) -> void 
+		{ 
+			edge_bucket_t& edge_bucket = edge_map_pair.second;
+			std::sort(edge_bucket.begin(), edge_bucket.end(), edge_sort()); 
+		});
+		scan_line2(edge_table, color);
+	}
+
+	/**
 	 * Draw rectangle defined by corners p1 and p2.
 	 */
 	void draw_rect(const vector2f& p1, const vector2f& p2, const color_rgb& color)
@@ -447,16 +518,6 @@ private:
         }
     }
 
-	struct edge_t
-	{
-		real_t y_max, x_min, slope_inv, x;
-	};
-	
-	struct 
-	{
-		bool operator()(const edge_t& a, const edge_t& b) { return a.x_min < b.x_min; }
-	} edge_sort;
-
 	void scan_line(const vector2f& p1, const vector2f& p2, const color_rgb& color)
 	{
 		using edge_bucket_t = std::vector<edge_t>;
@@ -473,7 +534,7 @@ private:
 		right_edge.slope_inv = left_edge.slope_inv = 0.0;
 		edge_bucket.push_back(left_edge);
 		edge_bucket.push_back(right_edge);
-		std::sort(edge_bucket.begin(), edge_bucket.end(), edge_sort);
+		std::sort(edge_bucket.begin(), edge_bucket.end(), edge_sort());
 		edge_table[std::min(p1.y, p2.y)] = edge_bucket;
 
 		active_edge_table_t active_edge_table;
@@ -490,11 +551,54 @@ private:
 			}
 			std::remove_if(active_edge_table.begin(), active_edge_table.end(), [y_cur](const edge_t& edge) -> bool { return edge.y_max <= y_cur;  });
 			//std::sort(active_edge_table.begin(), active_edge_table.end(), edge_sort);
-			active_edge_table.sort(edge_sort);
+			active_edge_table.sort(edge_sort());
 
 			active_edge_table_t::const_iterator left_edge, right_edge;
 			left_edge = active_edge_table.begin();
 			while(left_edge != active_edge_table.end())
+			{
+				right_edge = left_edge;
+				++right_edge;
+				set_pixel_row(floor<size_t>({ left_edge->x, y_cur }), std::floor(right_edge->x - left_edge->x), color);
+				std::advance(left_edge, 2);
+			}
+			y_cur += 1.0;
+			if (y_cur > y_max) break;
+			std::for_each(active_edge_table.begin(), active_edge_table.end(), [](edge_t& edge) { if (edge.slope_inv != 0.0) edge.x += edge.slope_inv; });
+		}
+	}
+
+	void scan_line2(const edge_table_t& edge_table, const color_rgb& color)
+	{
+		// todo: this should be done earlier
+		real_t y_max = 0.0;
+		for (auto bucket_pair : edge_table)
+		{
+			for (const edge_t& edge : bucket_pair.second)
+			{
+				y_max = std::max(y_max, edge.y_max);
+			}
+		}
+		//real_t y_max = edge_table.rbegin()->first;
+		active_edge_table_t active_edge_table;
+		edge_table_t::const_iterator et_itr = edge_table.begin();
+		real_t y_cur = et_itr->first;
+		while (!edge_table.empty() || !active_edge_table.empty())
+		{
+			edge_table_t::const_iterator itr = edge_table.find(y_cur);
+			if (itr != edge_table.end())
+			{
+				for (const edge_t& edge : itr->second)
+				{
+					active_edge_table.push_back(edge);
+				}
+			}
+			std::remove_if(active_edge_table.begin(), active_edge_table.end(), [y_cur](const edge_t& edge) -> bool { return edge.y_max <= y_cur;  });
+			active_edge_table.sort(edge_sort());
+
+			active_edge_table_t::const_iterator left_edge, right_edge;
+			left_edge = active_edge_table.begin();
+			while (left_edge != active_edge_table.end())
 			{
 				right_edge = left_edge;
 				++right_edge;
